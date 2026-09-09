@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Розклад — Тифлопедагогіка. Сурдопедагогіка, І курс</title>
+<style>
+  :root{
+    --ink:#1c2430;
+    --paper:#eef1f4;
+    --card:#ffffff;
+    --line:#d7dee5;
+    --accent:#2f6f6b;
+    --accent-soft:#e2efee;
+    --amber:#c8792a;
+    --muted:#5c6773;
+    --free:#8a95a1;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: "Iowan Old Style","Georgia","Charter",serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:28px 18px 60px;}
+  header{margin-bottom:22px;}
+  .kicker{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:12.5px;
+    letter-spacing:.04em;
+    color:var(--accent);
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  h1{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:26px;
+    line-height:1.25;
+    margin:0 0 8px;
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .sub{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:14px;
+    color:var(--muted);
+    margin:0;
+  }
+
+  nav.days{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    margin:24px 0 18px;
+    padding-bottom:4px;
+    scrollbar-width:none;
+  }
+  nav.days::-webkit-scrollbar{display:none;}
+  nav.days button{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    flex:0 0 auto;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    padding:9px 15px;
+    border-radius:999px;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  nav.days button .cnt{
+    font-weight:500;
+    color:var(--muted);
+    margin-left:4px;
+  }
+  nav.days button.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:#fff;
+  }
+  nav.days button.active .cnt{color:#c7cdd4;}
+
+  .day{display:none;}
+  .day.active{display:block;}
+
+  .pair{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:12px;
+  }
+  .pair.empty{
+    background:transparent;
+    border:1px dashed var(--line);
+  }
+  .pair-top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .pair-num{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.03em;
+    color:var(--accent);
+  }
+  .pair-time{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:13px;
+    color:var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .subject{
+    font-size:17px;
+    line-height:1.35;
+    margin:2px 0 4px;
+    font-weight:600;
+  }
+  .weeks{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    display:inline-block;
+    font-size:11.5px;
+    color:var(--amber);
+    background:#f7ead9;
+    border-radius:5px;
+    padding:1px 7px;
+    margin-bottom:6px;
+  }
+  .teacher{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:13.5px;
+    color:var(--muted);
+    margin:0 0 10px;
+  }
+  a.join{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:600;
+    color:#fff;
+    background:var(--accent);
+    padding:8px 14px;
+    border-radius:7px;
+  }
+  a.join:active{opacity:.85;}
+  a.join.moodle{background:#5a5044;}
+  .free-note{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:13px;
+    color:var(--free);
+    font-style:normal;
+  }
+  .empty .subject{
+    font-size:14px;
+    color:var(--free);
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-weight:400;
+    margin:0;
+  }
+  footer{
+    margin-top:26px;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:12px;
+    color:var(--free);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="kicker">ХНПУ ім. Г.С. Сковороди · ННІ спеціальної освіти та інклюзії</p>
+    <h1>А6.05‑Мд26‑13 · Тифлопедагогіка. Сурдопедагогіка</h1>
+    <p class="sub">І курс, магістратура · денна форма · І семестр 2026–2027 н.р.</p>
+  </header>
+
+  <nav class="days" id="dayNav"></nav>
+
+  <div id="days"></div>
+
+  <footer>Натисни на день зверху, потім на посилання пари — і одразу в Zoom / Meet / Moodle.</footer>
+</div>
+
+<script>
+const schedule = [
+  {
+    day: "Понеділок",
+    pairs: [
+      {num:"1 пара", time:"8:00–9:20", subject:"Методологія наукових досліджень та академічна доброчесність", type:"лекція", weeks:"4–11 тиждень", teacher:"проф. Бацилєва О.В.", link:"https://meet.google.com/hgc-uwvn-wce", linkType:"meet"},
+      {num:"2 пара", time:"9:30–10:50", subject:"Методологія наукових досліджень та академічна доброчесність", type:"семінар", weeks:"4–10 тиждень", teacher:"проф. Бацилєва О.В.", link:"https://meet.google.com/hgc-uwvn-wce", linkType:"meet"},
+      {num:"3 пара", time:"11:20–12:40", subject:"Основи оптометрії та аудіометрії", type:"лекція", weeks:"3–9 тиждень", teacher:"к.псих.н., доц. Тимофієнко Н.В., доц. Орлов А.В.", link:"https://meet.google.com/qan-kafz-hkp", linkType:"meet"},
+      {num:"4 пара", time:"13:00–14:20", subject:"Основи оптометрії та аудіометрії", type:"семінар", weeks:"3–10 тиждень", teacher:"к.псих.н., доц. Тимофієнко Н.В., доц. Орлов А.В.", link:"https://meet.google.com/qan-kafz-hkp", linkType:"meet"}
+    ]
+  },
+  {
+    day: "Вівторок",
+    pairs: [
+      {num:"1–4 пара", time:"8:00–14:20", subject:"Дисципліни блоку вільного вибору циклу загальної підготовки", type:"див. окремий розклад", weeks:"", teacher:"", link:"https://hnpu.edu.ua/education/free-choice/master", linkType:"other"}
+    ]
+  },
+  {
+    day: "Середа",
+    pairs: [
+      {num:"1–4 пара", time:"8:00–14:20", subject:"Дисципліни блоку вільного вибору циклу професійної підготовки", type:"див. окремий розклад", weeks:"", teacher:"", link:"https://hnpu.edu.ua/education/free-choice/master", linkType:"other"}
+    ]
+  },
+  {
+    day: "Четвер",
+    pairs: [
+      {num:"1 пара", time:"8:00–9:20", empty:true},
+      {num:"2 пара", time:"9:30–10:50", empty:true},
+      {num:"3 пара", time:"11:20–12:40", subject:"Педагогіка та психологія дітей із сенсорними порушеннями", type:"лекція", weeks:"3–13 тиждень", teacher:"проф. Синьова Є.П.", link:"https://meet.google.com/iff-kaot-xut", linkType:"meet"},
+      {num:"4 пара", time:"13:00–14:20", subject:"Педагогіка та психологія дітей із сенсорними порушеннями", type:"семінар", weeks:"3–11 тиждень", teacher:"", link:"", linkType:"moodle"},
+      {num:"5 пара", time:"14:40–16:00", subject:"Педагогіка та психологія дітей із сенсорними порушеннями", type:"семінар", weeks:"3–11 тиждень", teacher:"", link:"", linkType:"moodle"}
+    ]
+  },
+  {
+    day: "П'ятниця",
+    pairs: [
+      {num:"1 пара", time:"8:00–9:20", empty:true},
+      {num:"2 пара", time:"9:30–10:50", subject:"Актуальні проблеми спеціальної та інклюзивної освіти дітей із сенсорними порушеннями", type:"лекція", weeks:"3–8 тиждень", teacher:"", link:"", linkType:"moodle"},
+      {num:"3 пара", time:"11:20–12:40", subject:"Актуальні проблеми спеціальної та інклюзивної освіти дітей із сенсорними порушеннями", type:"семінар", weeks:"3–11 тиждень", teacher:"проф. Синьова Є.П.", link:"https://meet.google.com/vpd-rvqs-ioz", linkType:"meet"},
+      {num:"4 пара", time:"13:00–14:20", empty:true}
+    ]
+  }
+];
+
+const dayNav = document.getElementById('dayNav');
+const daysWrap = document.getElementById('days');
+
+schedule.forEach((d, i) => {
+  const filled = d.pairs.filter(p => !p.empty).length;
+  const btn = document.createElement('button');
+  btn.innerHTML = d.day + (filled ? ` <span class="cnt">${filled}</span>` : '');
+  btn.className = i === 0 ? 'active' : '';
+  btn.onclick = () => selectDay(i);
+  dayNav.appendChild(btn);
+
+  const section = document.createElement('div');
+  section.className = 'day' + (i === 0 ? ' active' : '');
+  section.id = 'day-' + i;
+
+  d.pairs.forEach(p => {
+    const card = document.createElement('div');
+    if (p.empty) {
+      card.className = 'pair empty';
+      card.innerHTML = `
+        <div class="pair-top">
+          <span class="pair-num">${p.num}</span>
+          <span class="pair-time">${p.time}</span>
+        </div>
+        <p class="subject">— вільно —</p>
+      `;
+    } else {
+      card.className = 'pair';
+      let linkHtml = '';
+      if (p.linkType === 'meet') {
+        linkHtml = `<a class="join" href="${p.link}" target="_blank" rel="noopener">Приєднатися ↗</a>`;
+      } else if (p.linkType === 'other') {
+        linkHtml = `<a class="join" href="${p.link}" target="_blank" rel="noopener">Окремий розклад ↗</a>`;
+      } else if (p.linkType === 'moodle') {
+        linkHtml = `<span class="free-note">на Moodle</span>`;
+      }
+      card.innerHTML = `
+        <div class="pair-top">
+          <span class="pair-num">${p.num}</span>
+          <span class="pair-time">${p.time}</span>
+        </div>
+        ${p.weeks ? `<span class="weeks">${p.weeks}</span><br>` : ''}
+        <p class="subject">${p.subject}${p.type ? ' <span style="font-weight:400;color:var(--muted);font-size:14px;">(' + p.type + ')</span>' : ''}</p>
+        ${p.teacher ? `<p class="teacher">${p.teacher}</p>` : ''}
+        ${linkHtml}
+      `;
+    }
+    section.appendChild(card);
+  });
+
+  daysWrap.appendChild(section);
+});
+
+function selectDay(i) {
+  document.querySelectorAll('nav.days button').forEach((b, idx) => b.classList.toggle('active', idx === i));
+  document.querySelectorAll('.day').forEach((d, idx) => d.classList.toggle('active', idx === i));
+}
+</script>
+</body>
+</html>
