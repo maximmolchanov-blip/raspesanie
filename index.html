@@ -196,7 +196,7 @@ const schedule = [
   {
     day: "Понеділок",
     pairs: [
-      {num:"1 пара", time:"8:00–9:20", subject:"Методологія наукових досліджень та академічна доброчесність", type:"лекція", weeks:"4–11 тиждень", teacher:"проф. Бацилєва О.В.", link:"https://meet.google.com/hgc-uwvn-wce", linkType:"meet"},
+      {num:"1 пара", time:"8:00–9:20", subject:"Методологія наукових досліджень та академічна доброчесність", type:"лекція", weeks:"4–11 тиждень", teacher:"проф. Бацилєва О.В.", email:"batsileva.olga@hnpu.edu.ua", link:"https://meet.google.com/hgc-uwvn-wce", linkType:"meet"},
       {num:"2 пара", time:"9:30–10:50", subject:"Методологія наукових досліджень та академічна доброчесність", type:"семінар", weeks:"4–10 тиждень", teacher:"проф. Бацилєва О.В.", link:"https://meet.google.com/hgc-uwvn-wce", linkType:"meet"},
       {num:"3 пара", time:"11:20–12:40", subject:"Основи оптометрії та аудіометрії", type:"лекція", weeks:"3–9 тиждень", teacher:"к.псих.н., доц. Тимофієнко Н.В., доц. Орлов А.В.", link:"https://meet.google.com/qan-kafz-hkp", linkType:"meet"},
       {num:"4 пара", time:"13:00–14:20", subject:"Основи оптометрії та аудіометрії", type:"семінар", weeks:"3–10 тиждень", teacher:"к.псих.н., доц. Тимофієнко Н.В., доц. Орлов А.В.", link:"https://meet.google.com/qan-kafz-hkp", linkType:"meet"}
@@ -205,13 +205,16 @@ const schedule = [
   {
     day: "Вівторок",
     pairs: [
-      {num:"1–4 пара", time:"8:00–14:20", subject:"Дисципліни блоку вільного вибору циклу загальної підготовки", type:"див. окремий розклад", weeks:"", teacher:"", link:"https://hnpu.edu.ua/education/free-choice/master", linkType:"other"}
+      {num:"1 пара", time:"8:00–9:20", subject:"Англійська мова повсякденної комунікації", type:"лекція", weeks:"", teacher:"", link:"https://us04web.zoom.us/j/7618791178?pwd=dkNuNXI4eG1GNVdYM0cyVk1UZ2tZUT09", linkType:"zoom"},
+      {num:"2 пара", time:"9:30–10:50", subject:"Англійська мова повсякденної комунікації", type:"семінар", weeks:"", teacher:"", link:"https://us04web.zoom.us/j/7618791178?pwd=dkNuNXI4eG1GNVdYM0cyVk1UZ2tZUT09", linkType:"zoom"}
     ]
   },
   {
     day: "Середа",
     pairs: [
-      {num:"1–4 пара", time:"8:00–14:20", subject:"Дисципліни блоку вільного вибору циклу професійної підготовки", type:"див. окремий розклад", weeks:"", teacher:"", link:"https://hnpu.edu.ua/education/free-choice/master", linkType:"other"}
+      {num:"1 пара", time:"8:00–9:20", subject:"Логопедія", type:"лекція", weeks:"", teacher:"", link:"https://us04web.zoom.us/j/8905334029?pwd=R1lUVUwwSDNPT2wvbDRVczNvRTFXZz09", linkType:"zoom"},
+      {num:"2 пара", time:"9:30–10:50", subject:"Логопедія", type:"семінар", weeks:"", teacher:"", link:"https://us04web.zoom.us/j/8905334029?pwd=R1lUVUwwSDNPT2wvbDRVczNvRTFXZz09", linkType:"zoom"},
+      {num:"3 пара", time:"11:20–12:40", subject:"Логопедія", type:"семінар", weeks:"", teacher:"", link:"https://us04web.zoom.us/j/8905334029?pwd=R1lUVUwwSDNPT2wvbDRVczNvRTFXZz09", linkType:"zoom"}
     ]
   },
   {
@@ -264,7 +267,7 @@ schedule.forEach((d, i) => {
     } else {
       card.className = 'pair';
       let linkHtml = '';
-      if (p.linkType === 'meet') {
+      if (p.linkType === 'meet' || p.linkType === 'zoom') {
         linkHtml = `<a class="join" href="${p.link}" target="_blank" rel="noopener">Приєднатися ↗</a>`;
       } else if (p.linkType === 'other') {
         linkHtml = `<a class="join" href="${p.link}" target="_blank" rel="noopener">Окремий розклад ↗</a>`;
@@ -278,7 +281,7 @@ schedule.forEach((d, i) => {
         </div>
         ${p.weeks ? `<span class="weeks">${p.weeks}</span><br>` : ''}
         <p class="subject">${p.subject}${p.type ? ' <span style="font-weight:400;color:var(--muted);font-size:14px;">(' + p.type + ')</span>' : ''}</p>
-        ${p.teacher ? `<p class="teacher">${p.teacher}</p>` : ''}
+        ${(p.teacher || p.email) ? `<p class="teacher">${p.teacher || ''}${p.email ? `${p.teacher ? ' · ' : ''}<a href="mailto:${p.email}" style="color:var(--accent);">${p.email}</a>` : ''}</p>` : ''}
         ${linkHtml}
       `;
     }
